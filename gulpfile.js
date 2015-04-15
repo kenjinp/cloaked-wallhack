@@ -79,12 +79,14 @@ gulp.task('htmlpage', function() {
 
 gulp.task('buildScript', function() {
   return browserify({
-    entries: [scriptDir + '/'+ appEntryPoint], debug: true
+    entries: ['./src/scripts/lib/reddit.min.js' , scriptDir + '/'+ appEntryPoint], debug: true
   })
     .transform(reactify)
     .bundle()
     .pipe(source(appEntryPoint))
     .pipe(gulp.dest(buildDir))
+    //.pipe(stripDebug())
+    //.pipe(uglify())
     .pipe(notify('Bundling Done.'));
 });
 

@@ -1,0 +1,12 @@
+// Variables
+$font-stack: Helvetica, sans-serif;
+
+// Colors
+$background:    #1abc89;
+$white:         #ffffff;
+
+body {
+  background-color: $background;
+  background-size: cover;
+  color: $white;
+}
