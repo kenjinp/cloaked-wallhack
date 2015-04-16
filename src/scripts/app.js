@@ -21,7 +21,7 @@ var Background = React.createClass({
     var url = this.props.back.url;
     return (
       <div className="background">
-        <img></img>
+        <img src={url}></img>
         <h3>{title}</h3>
         <h4>{author}</h4>
       </div>
@@ -32,11 +32,14 @@ var Background = React.createClass({
 var Quote = React.createClass({
   render: function() {
     var author = this.props.quote.author;
+    var authorUrl = 'http://uesp.net/w/index.php?search=' + author;
     var quote = this.props.quote.quote;
     return (
       <div className="quote-card">
         <h1>{quote}</h1>
-        <p>{author}</p>
+        <a href={authorUrl}>
+          <p>{author}</p>
+        </a>
       </div>
     );
   }
@@ -46,20 +49,50 @@ var QuoteViewer = React.createClass({
   getInitialState: function() {
     //returns initial state
     return {
-      back: BACKGROUND,
-      quote: QUOTE
-    }
+      back: {},
+      quote: {}
+    };
   },
   handleUserInput: function() {
     //change state data based on input
   },
   getBackgroundFromReddit: function() {
-    //get data from reddit
+    //get data from reddit /r/skyrimPorn
+    //var that = this;
+    reddit.hot('skyrimporn').limit(100).fetch(function (res) {
+      function grabRandom (res) {
+        var randomInt = Math.floor(Math.random() * res.data.children.length);
+        var postData = res.data.children[randomInt].data;
+        var extList = postData.url.split('.');
+        var ext = extList[extList.length - 1];
+        if (ext !== 'jpg') {
+          return grabRandom(res);
+        } else {
+          return postData;
+        }
+      }
+      redditData = grabRandom(res);
+      this.setState({back: redditData});
+    }.bind(this));
   },
   getQuoteFromTESQuotes: function() {
     //get data from api
+    var apiUrl = 'http://tesquotes.kenjin.me/api/random_quote'
+    $.get(apiUrl, function(res) {
+      if (this.isMounted()) {
+        this.setState({quote: res});
+      }
+    }.bind(this));
+  },
+  componentDidMount: function() {
+    this.getBackgroundFromReddit();
+    this.getQuoteFromTESQuotes();
+  },
+  responseHandler: function() {
+    this.setState({something: data});
   },
   render: function() {
+    var apiUrl = 'http://tesquotes.kenjin.me/api/random_quote'
     return (
       <div>
         <Background back={this.state.back}/>
