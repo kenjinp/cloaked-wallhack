@@ -1,0 +1,35 @@
+.quote-card {
+  background-color: $background;
+  position: absolute;
+  top: 30%;
+  width: 70%;
+  margin: 0 20%;
+
+  p {
+    margin-right: 20%;
+    text-align: right;
+  }
+}
+
+.background {
+  height: 100%;
+  position: relative;
+  width: 100%;
+
+  .img {
+    height: 100%;
+    width: 100%;
+  }
+
+  h3 {
+    bottom: 10px;
+    left: 20px;
+    position: absolute;
+  }
+
+  h4 {
+    bottom: 10px;
+    right: 20px;
+    position: absolute;
+  }
+}
