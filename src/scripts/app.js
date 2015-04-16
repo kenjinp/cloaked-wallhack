@@ -19,10 +19,10 @@ var Background = React.createClass({
     var title = this.props.back.title;
     var author = this.props.back.author;
     var url = this.props.back.url;
+    var post = 'http://reddit.com' + this.props.back.permalink;
     return (
       <div className="background">
-        <img src={url}></img>
-        <h3>{title}</h3>
+        <a href={post}><h3>{title}</h3></a>
         <h4>{author}</h4>
       </div>
     );
@@ -40,6 +40,7 @@ var Quote = React.createClass({
         <a href={authorUrl}>
           <p>{author}</p>
         </a>
+        <p className="center" >press space for more quotes</p>
       </div>
     );
   }
@@ -58,7 +59,8 @@ var QuoteViewer = React.createClass({
   },
   getBackgroundFromReddit: function() {
     //get data from reddit /r/skyrimPorn
-    //var that = this;
+    $('.background').removeClass('shown');
+    //$('.background').css('background-image', 'none');
     reddit.hot('skyrimporn').limit(100).fetch(function (res) {
       function grabRandom (res) {
         var randomInt = Math.floor(Math.random() * res.data.children.length);
@@ -73,20 +75,33 @@ var QuoteViewer = React.createClass({
       }
       redditData = grabRandom(res);
       this.setState({back: redditData});
+      $('.background').css('background-image', 'url('+ redditData.url +')');
+      $('.background').imagesLoaded(function() {
+        $('.background').addClass('shown');
+      });
+      //$('.background').css('background-image', this.state.back.url);
     }.bind(this));
   },
   getQuoteFromTESQuotes: function() {
     //get data from api
+    $('.quote-card').removeClass('shown');
     var apiUrl = 'http://tesquotes.kenjin.me/api/random_quote'
     $.get(apiUrl, function(res) {
       if (this.isMounted()) {
         this.setState({quote: res});
+        $('.quote-card').addClass('shown');
       }
     }.bind(this));
   },
   componentDidMount: function() {
     this.getBackgroundFromReddit();
     this.getQuoteFromTESQuotes();
+    $(window).keypress(function(e) {
+      if (e.keyCode == 0 || e.keyCode == 32) {
+        this.getBackgroundFromReddit();
+        this.getQuoteFromTESQuotes();
+      }
+    }.bind(this));
   },
   responseHandler: function() {
     this.setState({something: data});

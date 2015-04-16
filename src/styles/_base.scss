@@ -1,13 +1,38 @@
 // Variables
 $font-stack: Helvetica, sans-serif;
+@font-face {
+  font-family: dovah;
+  src: url(/font/dovah.ttf) format('ttf');
+}
 
 // Colors
 $background:    #1abc89;
-$white:         #ffffff;
+$dark-bg:       #1c7257;
+$white:            #fff;
 
 body {
-  background-color: $background;
+  background-color: $dark-bg;
   background-size: cover;
   color: $white;
-  font-family: $font-stack
+  font-family: $font-stack;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+a {
+  color: $white;
+  text-decoration: none;
+
+  p {
+    text-decoration: none;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:visited {
+    color: $white;
+  }
 }
